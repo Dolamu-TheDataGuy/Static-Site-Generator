@@ -1,4 +1,5 @@
 from textnode import TextNode, TextType
+from text_regex import extract_markdown_images, extract_markdown_links
 
 def split_nodes_delimiter(nodes, delimiter, text_type):
     result = []
@@ -29,3 +30,6 @@ def split_nodes_delimiter(nodes, delimiter, text_type):
             else:  # odd indices are the content between delimiters
                 result.append(TextNode(splitted_text[i], text_type))
     return result
+
+
+

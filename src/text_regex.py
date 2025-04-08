@@ -11,7 +11,7 @@ def extract_markdown_images(text: str):
 
 def extract_markdown_links(text:str):
 
-    patterns = r"\[(\D+?)\]\((https\:\/\/[A-Za-z0-9./@_]*)"
+    patterns = r"(?>!!)\[(\D+?)\]\((https\:\/\/[A-Za-z0-9./@_]*)"
 
     matches = re.findall(patterns, text)
     if matches:
