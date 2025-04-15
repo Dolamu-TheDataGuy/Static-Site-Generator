@@ -1,5 +1,5 @@
+import re
 from textnode import TextNode, TextType
-from text_regex import extract_markdown_images, extract_markdown_links
 
 def split_nodes_delimiter(nodes, delimiter, text_type):
     result = []
@@ -32,4 +32,21 @@ def split_nodes_delimiter(nodes, delimiter, text_type):
     return result
 
 
+def extract_markdown_images(text: str):
 
+    pattern = r"!\[(\D+?)\]\((https\:\/\/[A-Za-z0-9._]*\/[A-Za-z0-9._/@$#]*)\)"
+
+    matches = re.findall(pattern, text)
+    if matches:
+        return matches
+    return []
+
+
+def extract_markdown_links(text: str):
+
+    patterns = r"(?>!!)\[(\D+?)\]\((https\:\/\/[A-Za-z0-9./@_]*)"
+
+    matches = re.findall(patterns, text)
+    if matches:
+        return matches
+    return []
