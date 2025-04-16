@@ -44,9 +44,73 @@ def extract_markdown_images(text: str):
 
 def extract_markdown_links(text: str):
 
-    patterns = r"(?>!!)\[(\D+?)\]\((https\:\/\/[A-Za-z0-9./@_]*)"
+    patterns = r"(?<!!)\[(\D+?)\]\((https\:\/\/[A-Za-z0-9./@_]*)"
 
     matches = re.findall(patterns, text)
     if matches:
         return matches
     return []
+
+
+def split_node_image(nodes):
+    result = []
+    for node in nodes:
+        if node.text_type != TextType.TEXT:
+            result.append(TextNode(node.text, node.text_type, node.url))
+            continue
+        text = node.text
+        patterns_in_text = extract_markdown_images(text)
+
+        # Base case
+        if len(patterns_in_text) == 0:
+            result.append(TextNode(text, TextType.TEXT))
+            continue
+
+        if len(patterns_in_text) > 0:
+            splitted_text = text.split(
+                f"![{patterns_in_text[0][0]}]({patterns_in_text[0][1]})", maxsplit=1
+            )
+            before = splitted_text[0]
+            if before != "":
+                result.append(TextNode(before, node.text_type))
+            image = TextNode(
+                patterns_in_text[0][0], TextType.IMAGE, patterns_in_text[0][1]
+            )
+            result.append(image)
+            after = splitted_text[1]
+            if after != "":
+                after = split_node_image([TextNode(splitted_text[1], TextType.TEXT)])
+            result.extend(after)
+    return result
+
+
+def split_node_link(nodes):
+    result = []
+    for node in nodes:
+        if node.text_type != TextType.TEXT:
+            result.append(TextNode(node.text, node.text_type, node.url))
+            continue
+        text = node.text
+        patterns_in_text = extract_markdown_links(text)
+
+        # Base Case
+        if len(patterns_in_text) == 0:
+            result.append(TextNode(text, TextType.TEXT))
+            continue
+
+        if len(patterns_in_text) > 0:
+            splitted_text = text.split(
+                f"[{patterns_in_text[0][0]}]({patterns_in_text[0][1]})", maxsplit=1
+            )
+            before = splitted_text[0]
+            if before != "":
+                result.append(TextNode(before, TextType.TEXT))
+            link = TextNode(
+                patterns_in_text[0][0], TextType.LINK, patterns_in_text[0][1]
+            )
+            result.append(link)
+            after = splitted_text[1]
+            if after != "":
+                after = split_node_link([TextNode(splitted_text[1], TextType.TEXT)])
+            result.extend(after)
+    return result
