@@ -4,7 +4,8 @@ from inline_md import (
     extract_markdown_images,
     extract_markdown_links,
     split_node_image,
-    split_node_link
+    split_node_link,
+    text_to_textnodes
 )
 
 from textnode import TextNode, TextType
@@ -271,7 +272,7 @@ class TestSplitNodeImagesLinks(unittest.TestCase):
             result,
             [
                 TextNode("This is ", TextType.TEXT),
-                TextNode(text, TextType.BOLD),
+                TextNode("text", TextType.BOLD),
                 TextNode(" with an ", TextType.TEXT),
                 TextNode("italic", TextType.ITALIC),
                 TextNode(" word and a ", TextType.TEXT),
