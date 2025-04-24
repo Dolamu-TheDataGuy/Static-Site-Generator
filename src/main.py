@@ -1,8 +1,16 @@
-from textnode import TextNode, TextType
+import os
+import shutil
+from web_copy import copy_items
+
+source_dir = "./static"
+
+dest_dir = "./public"
 
 def main():
-    text_node1 = TextNode("Hello", TextType.NORMAL, "www.google.com")
-    print(text_node1)
-    
+    print("Deleting public directory...")
+    if os.path.exists(dest_dir):
+        shutil.rmtree(dest_dir)
+    copy_items(source_dir, dest_dir)
+
 if __name__ == "__main__":
     main()

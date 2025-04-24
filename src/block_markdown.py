@@ -175,3 +175,13 @@ def markdown_to_html_node(markdown):
         all_section.append(html_node)
     body_node = ParentNode(tag="div", children=all_section)
     return body_node
+
+
+def extract_title(markdown):
+    
+    lines = markdown.split("\n")
+    
+    for line in lines:
+        if line.startswith("# "):
+            return line[2:]
+    raise Exception("No title found in the markdown")
