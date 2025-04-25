@@ -183,5 +183,5 @@ def extract_title(markdown):
     
     for line in lines:
         if line.startswith("# "):
-            return line[2:]
+            return line[2:].strip()
     raise Exception("No title found in the markdown")
