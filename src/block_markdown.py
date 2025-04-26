@@ -1,4 +1,5 @@
 import re
+import os
 from htmlnode import ParentNode, HTMLNode, LeafNode
 from inline_md import text_to_textnodes
 from textnode import TextNode, TextType, text_node_to_html_node
@@ -14,7 +15,6 @@ class BlockType(Enum):
     ORDERED_LIST = "ordered_list"
 
 
-
 def markdown_to_blocks(markdown):
     blocks = markdown.split("\n\n")
     filtered_blocks = []
@@ -24,7 +24,6 @@ def markdown_to_blocks(markdown):
         block = block.strip()
         filtered_blocks.append(block)
     return filtered_blocks
-
 
 
 def block_to_block_type(markdown):
@@ -62,7 +61,6 @@ def block_to_block_type(markdown):
     return BlockType.PARAGRAPH
 
 
-
 def block_create_html_node(block_type, markdown: str):
     if block_type == BlockType.HEADING:
         return header(markdown)
@@ -79,7 +77,6 @@ def block_create_html_node(block_type, markdown: str):
     raise ValueError(f"Unknown block type: {block_type}")   
 
 
-
 def text_to_children(text: str):
     # First convert raw markdown text to TextNode then convert each TextNode to HTMLNode
     # return a list of TextNodes
@@ -87,7 +84,6 @@ def text_to_children(text: str):
     # return HTMLNodes for each TextNode
     htmlnodes = [text_node_to_html_node(text_node) for text_node in text_nodes]
     return htmlnodes
-
 
 
 def paragragh(text):
@@ -101,7 +97,6 @@ def paragragh(text):
     return parent_node
 
 
-
 def unordered_list_to_children(text):
     new_list = text.split("\n")
     text_list = [sentence.strip("- ") for sentence in new_list]
@@ -113,13 +108,11 @@ def unordered_list_to_children(text):
     return unordered_list
 
 
-
 def header(text):
     harsh_number = harsh_num(text)
     strip_code = ("#" * harsh_number) + " "
     tag_text = text.strip(strip_code)
     return ParentNode(tag=f"h{harsh_number}", children=text_to_children(tag_text))
-
 
 
 def quote_block(text):
@@ -135,7 +128,6 @@ def quote_block(text):
     return ParentNode(tag="blockquote", children=children)
 
 
-
 def code_block(text):
     if not text.startswith("```") or not text.endswith("```"):
         raise ValueError("Invalid code block")
@@ -143,7 +135,6 @@ def code_block(text):
     NewTextNode = TextNode(ntext, TextType.CODE)
     code_leaf_node = text_node_to_html_node(NewTextNode)
     return [code_leaf_node]
-
 
 
 def ordered_list(text):
@@ -157,11 +148,9 @@ def ordered_list(text):
     return ordered_list
 
 
-
 def harsh_num(text):
     split_harsh = text.split(" ", 1)
     return int(len(split_harsh[0]))
-
 
 
 def markdown_to_html_node(markdown):
@@ -185,3 +174,23 @@ def extract_title(markdown):
         if line.startswith("# "):
             return line[2:].strip()
     raise Exception("No title found in the markdown")
+
+
+def generate_page(from_path, template_path, dest_path):
+    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
+    with open(from_path, "r") as f:
+        md_content = f.read()
+    with open(template_path, "r") as f:
+        template_content = f.read()
+
+    md_html_content = markdown_to_html_node(md_content).to_html()
+    title = extract_title(md_content)
+    template_content = template_content.replace("{{ Title }}", title)
+    template_content = template_content.replace("{{ Content }}", md_html_content)
+    
+
+    if not os.path.exists(dest_path):
+        os.makedirs(os.path.dirname(dest_path), exist_ok=True)
+    
+    with open(dest_path, "w") as f:
+        f.write(template_content)
