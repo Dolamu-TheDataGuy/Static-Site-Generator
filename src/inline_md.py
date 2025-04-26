@@ -34,7 +34,7 @@ def split_nodes_delimiter(nodes, delimiter, text_type):
 
 def extract_markdown_images(text: str):
 
-    pattern = r"!\[(\D+?)\]\((https\:\/\/[A-Za-z0-9._]*\/[A-Za-z0-9._/@$#]*)\)"
+    pattern = r"!\[(\D+?)\]\((.*?)\)"
 
     matches = re.findall(pattern, text)
     if matches:
@@ -44,7 +44,7 @@ def extract_markdown_images(text: str):
 
 def extract_markdown_links(text: str):
 
-    patterns = r"(?<!!)\[(\D+?)\]\((https\:\/\/[A-Za-z0-9./@_]*)"
+    patterns = r"(?<!!)\[(\D+?)\]\((.*?)\)"
 
     matches = re.findall(patterns, text)
     if matches:
@@ -60,6 +60,7 @@ def split_node_image(nodes):
             continue
         text = node.text
         patterns_in_text = extract_markdown_images(text)
+        # print(patterns_in_text)
 
         # Base case
         if len(patterns_in_text) == 0:
@@ -77,10 +78,11 @@ def split_node_image(nodes):
                 patterns_in_text[0][0], TextType.IMAGE, patterns_in_text[0][1]
             )
             result.append(image)
-            after = splitted_text[1]
-            if after != "":
-                after = split_node_image([TextNode(splitted_text[1], TextType.TEXT)])
-            result.extend(after)
+            if len(splitted_text) > 1:
+                after = splitted_text[1]
+                if after != "":
+                    after = split_node_image([TextNode(after, TextType.TEXT)])
+                    result.extend(after)
     return result
 
 
@@ -109,18 +111,21 @@ def split_node_link(nodes):
                 patterns_in_text[0][0], TextType.LINK, patterns_in_text[0][1]
             )
             result.append(link)
-            after = splitted_text[1]
-            if after != "":
-                after = split_node_link([TextNode(splitted_text[1], TextType.TEXT)])
-            result.extend(after)
+            if len(splitted_text) > 1:
+                after = splitted_text[1]
+                if after != "":
+                    after = split_node_link([TextNode(after, TextType.TEXT)])
+                    result.extend(after)
     return result
 
 
 def text_to_textnodes(all_text):
     node = [TextNode(all_text, TextType.TEXT)]
+    print(node)
 
     # Applying image and link split
     node = split_node_image(node)
+    print(node)
     node = split_node_link(node)
 
     # #Applying delimiter splits
