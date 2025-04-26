@@ -1,5 +1,5 @@
 import unittest
-from block_markdown import extract_title
+from gen_content import extract_title
 
 class TestGenContent(unittest.TestCase):
     def test_extract_title_1(self):

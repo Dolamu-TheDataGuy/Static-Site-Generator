@@ -1,7 +1,7 @@
 import os
 import shutil
 from web_copy import copy_items
-from block_markdown import generate_page
+from gen_content import generate_page
 
 source_dir = "./static"
 

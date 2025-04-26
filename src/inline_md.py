@@ -121,11 +121,9 @@ def split_node_link(nodes):
 
 def text_to_textnodes(all_text):
     node = [TextNode(all_text, TextType.TEXT)]
-    print(node)
 
     # Applying image and link split
     node = split_node_image(node)
-    print(node)
     node = split_node_link(node)
 
     # #Applying delimiter splits
