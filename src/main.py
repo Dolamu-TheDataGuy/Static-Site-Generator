@@ -11,13 +11,14 @@ dest_dir = "./docs/images"
 from_path = "./content"
 template_path = "./template.html"
 dest_path = "./docs"
+default_base_path = "/"
 
-base_path = "/"
-
-if len(sys.argv) > 1:
-    base_path = sys.argv[1]
 
 def main():
+    base_path = default_base_path
+    if len(sys.argv) > 1:
+        base_path = sys.argv[1]
+        
     print("Deleting public directory...")
     if os.path.exists(dest_dir):
         shutil.rmtree(dest_dir)
