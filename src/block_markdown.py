@@ -155,7 +155,6 @@ def harsh_num(text):
 
 def markdown_to_html_node(markdown):
     markdowns = markdown_to_blocks(markdown)
-    # print(markdowns)
 
     all_section = []
     for mkd_section in markdowns:
