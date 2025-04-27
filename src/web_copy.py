@@ -21,15 +21,3 @@ def copy_items(source_dir, dest_dir):
         else:
             print(f"Copying directory: {source_item} to {dest_item}")
             copy_items(source_item, dest_item)
-
-
-def main():
-    source_dir = "/home/dolzy/workspace/github.com/Dolamu-TheDataGuy/Static_Site_Generator/static"
-
-    dest_dir = "/home/dolzy/workspace/github.com/Dolamu-TheDataGuy/Static_Site_Generator/public"
-    
-    copy_items(source_dir, dest_dir)
-
-    
-if __name__ == "__main__":
-    main()
