@@ -29,3 +29,25 @@ def generate_page(from_path, template_path, dest_path):
 
     with open(dest_path, "w") as f:
         f.write(template_content)
+
+
+def generate_pages_recursively(dir_path_content, template_path, dest_dir_path):
+    folder_content = os.listdir(dir_path_content)
+    
+    for item in folder_content:
+        item_path = os.path.join(dir_path_content, item)
+        
+        # Recursive case: if item is a directory
+        if os.path.isdir(item_path):
+            print(f"Found a directory: {item}")
+            new_dest_dir_path = os.path.join(dest_dir_path, item)
+            os.makedirs(new_dest_dir_path, exist_ok=True)
+            generate_pages_recursively(item_path, template_path, new_dest_dir_path)
+        
+        # Base case: if item is a file or markdown file    
+        elif item.endswith(".md"):
+            print(f"Found a markdown file: Generating page for {item}")
+            new_dest_path = os.path.join(dest_dir_path, item.replace(".md", ".html"))
+            generate_page(item_path, template_path, new_dest_path)
+            print(f"Generated page: {new_dest_path}")
+
