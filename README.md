@@ -4,7 +4,7 @@ This an Intelligent system that converts markdown page into an HTML page as a bl
 
 ## Architecture of the System
 
-[System Attribute](./content/documentation/NodesEnums.jpg)
+![System Attribute](./content/documentation/NodesEnums.jpg)
 
 ## TextNode
 
@@ -50,4 +50,4 @@ We used sumtypes here also. For each block in the markdown, they can either be o
 * ORDERED LIST - An ordered list in markdown starts with a number followed by a . character and a space. The number must start at 1 and increment by 1 for each line.
 
 
-[inline functions](./content/documentation/Inline_functions.jpg)
+![inline functions](./content/documentation/Inline_functions.jpg)
