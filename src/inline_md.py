@@ -1,6 +1,27 @@
 import re
 from textnode import TextNode, TextType
 
+
+def extract_markdown_images(text: str):
+
+    pattern = r"!\[(\D+?)\]\((.*?)\)"
+
+    matches = re.findall(pattern, text)
+    if matches:
+        return matches
+    return []
+
+
+def extract_markdown_links(text: str):
+
+    patterns = r"(?<!!)\[(\D+?)\]\((.*?)\)"
+
+    matches = re.findall(patterns, text)
+    if matches:
+        return matches
+    return []
+
+
 def split_nodes_delimiter(nodes, delimiter, text_type):
     result = []
 
@@ -30,26 +51,6 @@ def split_nodes_delimiter(nodes, delimiter, text_type):
             else:  # odd indices are the content between delimiters
                 result.append(TextNode(splitted_text[i], text_type))
     return result
-
-
-def extract_markdown_images(text: str):
-
-    pattern = r"!\[(\D+?)\]\((.*?)\)"
-
-    matches = re.findall(pattern, text)
-    if matches:
-        return matches
-    return []
-
-
-def extract_markdown_links(text: str):
-
-    patterns = r"(?<!!)\[(\D+?)\]\((.*?)\)"
-
-    matches = re.findall(patterns, text)
-    if matches:
-        return matches
-    return []
 
 
 def split_node_image(nodes):
