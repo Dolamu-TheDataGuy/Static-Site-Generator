@@ -18,9 +18,9 @@ def main():
     base_path = default_base_path
     if len(sys.argv) > 1:
         base_path = sys.argv[1]
-        
-    print("Deleting public directory...")
+
     if os.path.exists(dest_dir):
+        print("Deleting destination directory because it exists in your repo...")
         shutil.rmtree(dest_dir)
     copy_items(source_dir, dest_dir)
     generate_pages_recursively(from_path, template_path, dest_path, base_path)
