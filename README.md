@@ -51,3 +51,4 @@ We used sumtypes here also. For each block in the markdown, they can either be o
 
 
 ![inline functions](./content/documentation/Inline_functions.jpg)
+
