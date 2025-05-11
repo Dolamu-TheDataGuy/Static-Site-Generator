@@ -49,6 +49,35 @@ We used sumtypes here also. For each block in the markdown, they can either be o
 * UNORDERED LIST - An unordered list in markdown starts with a dash and dot followed by the text (`- boy`).
 * ORDERED LIST - An ordered list in markdown starts with a number followed by a . character and a space. The number must start at 1 and increment by 1 for each line.
 
-
 ![inline functions](./content/documentation/Inline_functions.jpg)
 
+* `extract_markdown_images`: This function extracts patterns of images in a markdown text. We implemented the concept of [regex](https://medium.com/towards-data-engineering/regular-expressions-an-art-of-manipulating-strings-642aa5cf94f3) in this function.
+
+* `extract_markdown_links`: This function extracts patterns of links in a markdown text. We implemented the concept of [regex](https://medium.com/towards-data-engineering/regular-expressions-an-art-of-manipulating-strings-642aa5cf94f3) in this function.
+
+* `split_nodes_delimiter`: This functions helps us to seperate textnode that have delimiter characters for either bold, italics or code.
+
+* `split_nodes_link`: This functions helps us to seperate textnode that have link pattern text.
+
+* `split_nodes_image`: This functions helps us to seperate textnode that have image pattern text.
+
+* `text_to_textnode`: In this function, we aggregrate all 3 split functions (`split_nodes_delimiter`,`split_nodes_link`, and `split_nodes_image`) to seamlessly process a text with delimiter, image, and link pattern into seperate textnodes.
+
+```
+text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+
+result = [
+                TextNode("This is ", TextType.TEXT),
+                TextNode("text", TextType.BOLD),
+                TextNode(" with an ", TextType.TEXT),
+                TextNode("italic", TextType.ITALIC),
+                TextNode(" word and a ", TextType.TEXT),
+                TextNode("code block", TextType.CODE),
+                TextNode(" and an ", TextType.TEXT),
+                TextNode(
+                    "obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"
+                ),
+                TextNode(" and a ", TextType.TEXT),
+                TextNode("link", TextType.LINK, "https://boot.dev"),
+            ]
+```
